@@ -18,6 +18,7 @@ Mathematical expression evaluator featuring a custom hand-written Lexer, Recursi
 
 The project is designed to be cross-platform and has been tested on:
 - **macOS** (Clang)
+- **linux** (Clang)
 
 ## Building the Program
 
@@ -43,7 +44,8 @@ cc -o nob nob.c
 ### Interactive REPL
 Launch the interactive mode by running the executable without arguments:
 ```bash
-./build/calc
+./build/calc 
+# or ./nob run
 > a = 10
 Result: 10
 > (a + 5) * 2
