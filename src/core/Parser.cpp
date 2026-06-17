@@ -1,7 +1,11 @@
 #include "Parser.hpp"
 #include <stdexcept>
 
-Parser::Parser(std::vector<Token> tokens) : tokens_(std::move(tokens)) {}
+Parser::Parser(std::vector<Token> tokens) : tokens_(std::move(tokens)) {
+    if (tokens_.empty()) {
+        tokens_.push_back(Token(TokenType::TK_EOF, "", {0, 0}));
+    }
+}
 
 std::unique_ptr<AstNode> Parser::parse() {
     if (tokens_.empty()) return nullptr;
@@ -68,6 +72,7 @@ std::unique_ptr<AstNode> Parser::parsePrimary() {
 }
 
 bool Parser::match(TokenType type) {
+    if (isAtEnd()) return false;
     if (peek().type() == type) {
         advance();
         return true;
@@ -81,16 +86,18 @@ Token Parser::advance() {
 }
 
 Token Parser::peek() const {
-    if (isAtEnd()) return tokens_.back();
+    if (pos_ >= tokens_.size()) return tokens_.back(); 
     return tokens_[pos_];
 }
 
 Token Parser::previous() const {
+    if (pos_ == 0) return tokens_[0];
     return tokens_[pos_ - 1];
 }
 
 bool Parser::isAtEnd() const {
-    return pos_ >= tokens_.size() || tokens_[pos_].type() == TokenType::TK_EOF;
+    if (pos_ >= tokens_.size()) return true;
+    return tokens_[pos_].type() == TokenType::TK_EOF;
 }
 
 Token Parser::consume(TokenType type, const std::string& message) {

@@ -1,6 +1,10 @@
 #include "Pipeline.h"
 
+#include "Lexer.hpp"
+#include "Parser.hpp"
+
 #include <fstream>
+#include <memory>
 
 // ====
 
@@ -12,10 +16,16 @@ Pipeline::Pipeline(std::string path) {
 
 }
 
+Pipeline::~Pipeline() {
+
+}
 
 void Pipeline::run() {
 
-
+    Lexer lexer;
+    auto tokens = lexer.tokenize(content);
+    Parser parser(tokens);
+    std::unique_ptr<AstNode> root = parser.parse();
 
 }
 
