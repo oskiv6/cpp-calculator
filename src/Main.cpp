@@ -27,7 +27,7 @@ void processInput(const std::string& input, Lexer& lexer, Interpreter& interpret
                 root->print();
                 std::cout << "---------------------" << std::endl;
             }
-            
+
             double result = interpreter.evaluate(root.get());
             std::cout << "Result: " << result << std::endl;
         }
@@ -38,7 +38,7 @@ void processInput(const std::string& input, Lexer& lexer, Interpreter& interpret
 
 void runRepl(Lexer& lexer, Interpreter& interpreter, bool debug) {
     std::string line;
-    std::cout << "Cpp-Calculator REPL (Type 'exit' to quit)" << std::endl;
+    std::cout << "Cpp-Calculator (Type 'exit' to quit)" << std::endl;
 
     while (true) {
         std::cout << "> ";
