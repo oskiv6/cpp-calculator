@@ -15,6 +15,10 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
 
         if (std::isdigit(c)) {
             while (std::isdigit(peek())) advance();
+            if (peek() == '.' && std::isdigit(input_[pos_ + 1])) {
+                advance(); // consume '.'
+                while (std::isdigit(peek())) advance();
+            }
             tokens.push_back(makeToken(TokenType::TK_LIT_NUM, input_.substr(start_, pos_ - start_)));
         } else if (std::isalpha(c)) {
             while (std::isalnum(peek())) advance();
@@ -27,6 +31,8 @@ std::vector<Token> Lexer::tokenize(const std::string& input) {
                 case '*': tokens.push_back(makeToken(TokenType::TK_ASTERISK, "*")); break;
                 case '/': tokens.push_back(makeToken(TokenType::TK_SLASH, "/")); break;
                 case '%': tokens.push_back(makeToken(TokenType::TK_PERCENT, "%")); break;
+                case '(': tokens.push_back(makeToken(TokenType::TK_LPAREN, "(")); break;
+                case ')': tokens.push_back(makeToken(TokenType::TK_RPAREN, ")")); break;
                 default: break; // Ignore unknown characters for now
             }
         }

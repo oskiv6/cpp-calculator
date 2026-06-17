@@ -8,6 +8,7 @@ const char* sources[] = {
     "src/Main.cpp",
     "src/core/Lexer.cpp",
     "src/core/Parser.cpp",
+    "src/interpreter/Interpreter.cpp",
 };
 
 const char* flags[] = {

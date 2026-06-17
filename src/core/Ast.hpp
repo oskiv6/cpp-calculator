@@ -60,6 +60,10 @@ public:
     AstBinaryExpr(Span span, std::unique_ptr<AstNode> left, std::unique_ptr<AstNode> right, Token op)
         : AstNode(span), left_(std::move(left)), right_(std::move(right)), op_(std::move(op)) {}
 
+    const AstNode* left() const { return left_.get(); }
+    const AstNode* right() const { return right_.get(); }
+    const Token& op() const { return op_; }
+
     void print(int indent = 0) const override {
         printIndent(indent);
         printf("BinaryExpr (%s):\n", op_.lexeme().c_str());
@@ -77,6 +81,9 @@ class AstAssignment : public AstNode {
 public:
     AstAssignment(Span span, std::string identifier, std::unique_ptr<AstNode> value)
         : AstNode(span), identifier_(std::move(identifier)), value_(std::move(value)) {}
+
+    const std::string& identifier() const { return identifier_; }
+    const AstNode* value() const { return value_.get(); }
 
     void print(int indent = 0) const override {
         printIndent(indent);

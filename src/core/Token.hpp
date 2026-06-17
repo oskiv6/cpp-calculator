@@ -17,6 +17,9 @@ enum class TokenType {
     TK_SLASH,       // /
     TK_PERCENT,     // %
 
+    TK_LPAREN,      // (
+    TK_RPAREN,      // )
+
     TK_EOF
 };
 

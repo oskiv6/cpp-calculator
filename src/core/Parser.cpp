@@ -60,6 +60,12 @@ std::unique_ptr<AstNode> Parser::parseFactor() {
 }
 
 std::unique_ptr<AstNode> Parser::parsePrimary() {
+    if (match(TokenType::TK_LPAREN)) {
+        auto expr = parseExpression();
+        consume(TokenType::TK_RPAREN, "Expect ')' after expression.");
+        return expr;
+    }
+
     if (match(TokenType::TK_LIT_NUM)) {
         return std::make_unique<AstLiteral>(previous().span(), previous());
     }

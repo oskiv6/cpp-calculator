@@ -6,13 +6,14 @@
 #include "core/Lexer.hpp"
 #include "core/Parser.hpp"
 #include "core/Ast.hpp"
+#include "interpreter/Interpreter.hpp"
 
 struct Config {
     bool debug = false;
     std::string filename = "";
 };
 
-void processInput(const std::string& input, Lexer& lexer, bool debug) {
+void processInput(const std::string& input, Lexer& lexer, Interpreter& interpreter, bool debug) {
     if (input.empty()) return;
 
     try {
@@ -26,14 +27,16 @@ void processInput(const std::string& input, Lexer& lexer, bool debug) {
                 root->print();
                 std::cout << "---------------------" << std::endl;
             }
-            // Future: evaluate(root)
+            
+            double result = interpreter.evaluate(root.get());
+            std::cout << "Result: " << result << std::endl;
         }
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
     }
 }
 
-void runRepl(Lexer& lexer, bool debug) {
+void runRepl(Lexer& lexer, Interpreter& interpreter, bool debug) {
     std::string line;
     std::cout << "Cpp-Calculator REPL (Type 'exit' to quit)" << std::endl;
 
@@ -42,11 +45,11 @@ void runRepl(Lexer& lexer, bool debug) {
         if (!std::getline(std::cin, line) || line == "exit") {
             break;
         }
-        processInput(line, lexer, debug);
+        processInput(line, lexer, interpreter, debug);
     }
 }
 
-void runFile(const std::string& filename, Lexer& lexer, bool debug) {
+void runFile(const std::string& filename, Lexer& lexer, Interpreter& interpreter, bool debug) {
     std::ifstream file(filename);
     if (!file.is_open()) {
         std::cerr << "Error: Could not open file " << filename << std::endl;
@@ -55,13 +58,14 @@ void runFile(const std::string& filename, Lexer& lexer, bool debug) {
 
     std::string line;
     while (std::getline(file, line)) {
-        processInput(line, lexer, debug);
+        processInput(line, lexer, interpreter, debug);
     }
 }
 
 int main(int argc, char* argv[]) {
     Config config;
     Lexer lexer;
+    Interpreter interpreter;
 
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
@@ -73,9 +77,9 @@ int main(int argc, char* argv[]) {
     }
 
     if (!config.filename.empty()) {
-        runFile(config.filename, lexer, config.debug);
+        runFile(config.filename, lexer, interpreter, config.debug);
     } else {
-        runRepl(lexer, config.debug);
+        runRepl(lexer, interpreter, config.debug);
     }
 
     return 0;
